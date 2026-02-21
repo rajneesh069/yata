@@ -1,0 +1,13 @@
+{
+  "name": "api",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Go Lang server for YATA",
+  "scripts": {
+    "lint": "golangci-lint run ./...",
+    "dev": "air",
+    "build": "go build -o ./bin/api ./cmd/api",
+    "start": "./bin/api",
+    "test": "go test ./... -v"
+  }
+}
