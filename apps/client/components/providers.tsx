@@ -6,7 +6,12 @@ import { ClerkProvider } from "@clerk/nextjs";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <ClerkProvider>
+    <ClerkProvider
+      taskUrls={{
+        "choose-organization": "/session-tasks/choose-organization",
+        "reset-password": "/session-tasks/reset-password",
+      }}
+    >
       <NextThemesProvider
         attribute="class"
         defaultTheme="system"

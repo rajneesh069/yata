@@ -2,13 +2,12 @@ import { Inter } from "next/font/google";
 
 import "@workspace/ui/globals.css";
 import { Providers } from "@/components/providers";
-import {
-  SignedIn,
-  SignedOut,
-  SignInButton,
-  SignUpButton,
-  UserButton,
-} from "@clerk/nextjs";
+import { SignedIn, SignedOut, SignInButton, SignUpButton } from "@clerk/nextjs";
+import { CustomUserButton } from "@/components/custom-user-button";
+import Link from "next/link";
+import { HomeIcon } from "lucide-react";
+import { ModeToggle } from "@workspace/ui/components/mode-toggle";
+import { Button } from "@workspace/ui/components/button";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -24,22 +23,39 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.variable} font-inter antialiased h-[100vh]`}>
         <Providers>
-          <header className="flex justify-end items-center p-4 gap-4 h-[8vh]">
-            {/* Show the sign-in and sign-up buttons when the user is signed out */}
-            <SignedOut>
-              <SignInButton />
-              <SignUpButton>
-                <button className="bg-[#6c47ff] text-white rounded-full font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 cursor-pointer">
-                  Sign Up
-                </button>
-              </SignUpButton>
-            </SignedOut>
-            {/* Show the user button when the user is signed in */}
-            <SignedIn>
-              <UserButton />
-            </SignedIn>
+          <header className="flex justify-between items-center p-4 gap-4 h-[8vh] border border-b">
+            <div>
+              <Link href="/">
+                <div className="leading-tight">
+                  <h1 className="text-3xl font-bold tracking-tight">YATA</h1>
+                  <p className="text-xs text-muted-foreground">
+                    Yet Another Ticketing App
+                  </p>
+                </div>
+              </Link>
+            </div>
+            <div className="flex gap-3">
+              <SignedOut>
+                <ModeToggle />
+                <SignInButton>Login</SignInButton>
+                <SignUpButton />
+              </SignedOut>
+
+              <SignedIn>
+                <Link href="/">
+                  <Button
+                    className="flex items-center gap-2 text-sm font-medium"
+                    variant={"outline"}
+                  >
+                    <HomeIcon className="size-4" />
+                  </Button>
+                </Link>
+                <ModeToggle />
+                <CustomUserButton />
+              </SignedIn>
+            </div>
           </header>
-          <div className="h-[92vh]">{children}</div>
+          <div className="mt-2 h-[92vh]">{children}</div>
         </Providers>
       </body>
     </html>
