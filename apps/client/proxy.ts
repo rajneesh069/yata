@@ -4,18 +4,6 @@ const isPublicRoute = createRouteMatcher(["/sign-in(.*)", "/", "/sign-up(.*)"]);
 
 export default clerkMiddleware(async (auth, req) => {
   if (!isPublicRoute(req)) {
-    const { isAuthenticated, sessionStatus } = await auth();
-
-    if (
-      !isAuthenticated &&
-      sessionStatus === "pending" &&
-      !isPublicRoute(req)
-    ) {
-      const url = req.nextUrl.clone();
-      url.pathname = "/session-tasks/choose-organization";
-      return Response.redirect(url);
-    }
-
     await auth.protect();
   }
 });

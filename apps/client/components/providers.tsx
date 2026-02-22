@@ -1,26 +1,33 @@
 "use client";
 
 import * as React from "react";
-import { ThemeProvider as NextThemesProvider } from "next-themes";
+import { ThemeProvider as NextThemesProvider, useTheme } from "next-themes";
 import { ClerkProvider } from "@clerk/nextjs";
+import { dark } from "@clerk/themes";
+
+function ClerkProviderWithTheme({ children }: { children: React.ReactNode }) {
+  const { resolvedTheme } = useTheme();
+  return (
+    <ClerkProvider
+      appearance={{
+        theme: resolvedTheme === "dark" ? dark : undefined,
+      }}
+    >
+      {children}
+    </ClerkProvider>
+  );
+}
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <ClerkProvider
-      taskUrls={{
-        "choose-organization": "/session-tasks/choose-organization",
-        "reset-password": "/session-tasks/reset-password",
-      }}
+    <NextThemesProvider
+      attribute="class"
+      defaultTheme="light"
+      enableSystem
+      disableTransitionOnChange
+      enableColorScheme
     >
-      <NextThemesProvider
-        attribute="class"
-        defaultTheme="system"
-        enableSystem
-        disableTransitionOnChange
-        enableColorScheme
-      >
-        {children}
-      </NextThemesProvider>
-    </ClerkProvider>
+      <ClerkProviderWithTheme>{children}</ClerkProviderWithTheme>
+    </NextThemesProvider>
   );
 }

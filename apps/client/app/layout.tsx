@@ -2,7 +2,12 @@ import { Inter } from "next/font/google";
 
 import "@workspace/ui/globals.css";
 import { Providers } from "@/components/providers";
-import { SignedIn, SignedOut, SignInButton, SignUpButton } from "@clerk/nextjs";
+import {
+  OrganizationSwitcher,
+  SignedIn,
+  SignedOut,
+  SignInButton,
+} from "@clerk/nextjs";
 import { CustomUserButton } from "@/components/custom-user-button";
 import Link from "next/link";
 import { HomeIcon } from "lucide-react";
@@ -38,7 +43,6 @@ export default function RootLayout({
               <SignedOut>
                 <ModeToggle />
                 <SignInButton>Login</SignInButton>
-                <SignUpButton />
               </SignedOut>
 
               <SignedIn>
@@ -51,6 +55,10 @@ export default function RootLayout({
                   </Button>
                 </Link>
                 <ModeToggle />
+                <OrganizationSwitcher
+                  afterSelectOrganizationUrl={":slug"}
+                  afterSelectPersonalUrl={":id"}
+                />
                 <CustomUserButton />
               </SignedIn>
             </div>
