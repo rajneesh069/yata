@@ -13,11 +13,17 @@ import Link from "next/link";
 import { HomeIcon } from "lucide-react";
 import { ModeToggle } from "@workspace/ui/components/mode-toggle";
 import { Button } from "@workspace/ui/components/button";
+import { Metadata } from "next";
 
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
 });
+
+export const metadata: Metadata = {
+  title: "Home",
+  description: "Home page of YATA(Yet Another Ticketing App)",
+};
 
 export default function RootLayout({
   children,
@@ -56,8 +62,8 @@ export default function RootLayout({
                 </Link>
                 <ModeToggle />
                 <OrganizationSwitcher
-                  afterSelectOrganizationUrl={":slug"}
-                  afterSelectPersonalUrl={":id"}
+                  afterSelectOrganizationUrl={"/org/:slug"}
+                  afterSelectPersonalUrl={"/user/:id"}
                 />
                 <CustomUserButton />
               </SignedIn>

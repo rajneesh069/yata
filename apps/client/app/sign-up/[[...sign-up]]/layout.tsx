@@ -1,0 +1,14 @@
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Sign Up",
+  description: "Sign Up page of YATA (Yet Another Ticketing App)",
+};
+
+export default function SignUpLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return <>{children}</>;
+}
