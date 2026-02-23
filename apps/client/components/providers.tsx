@@ -4,6 +4,7 @@ import * as React from "react";
 import { ThemeProvider as NextThemesProvider, useTheme } from "next-themes";
 import { ClerkProvider } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
+import { TooltipProvider } from "@workspace/ui/components/tooltip";
 
 function ClerkProviderWithTheme({ children }: { children: React.ReactNode }) {
   const { resolvedTheme } = useTheme();
@@ -27,7 +28,9 @@ export function Providers({ children }: { children: React.ReactNode }) {
       disableTransitionOnChange
       enableColorScheme
     >
-      <ClerkProviderWithTheme>{children}</ClerkProviderWithTheme>
+      <TooltipProvider>
+        <ClerkProviderWithTheme>{children}</ClerkProviderWithTheme>
+      </TooltipProvider>
     </NextThemesProvider>
   );
 }

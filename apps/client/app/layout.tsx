@@ -25,6 +25,14 @@ export const metadata: Metadata = {
   description: "Home page of YATA(Yet Another Ticketing App)",
 };
 
+import { AppSidebar } from "@/components/app-sidebar";
+import {
+  SidebarProvider,
+  SidebarInset,
+  SidebarTrigger,
+} from "@workspace/ui/components/sidebar";
+import { SmartHeading } from "@/components/smart-heading";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -34,42 +42,59 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.variable} font-inter antialiased h-[100vh]`}>
         <Providers>
-          <header className="flex justify-between items-center p-4 gap-4 h-[8vh] border border-b">
-            <div>
-              <Link href="/">
-                <div className="leading-tight">
-                  <h1 className="text-3xl font-bold tracking-tight">YATA</h1>
-                  <p className="text-xs text-muted-foreground">
-                    Yet Another Ticketing App
-                  </p>
+          <SidebarProvider>
+            <AppSidebar />
+            <SidebarInset>
+              {/* Mobile Header for Sidebar */}
+              <header className="flex justify-between h-14 items-center gap-2 border-b px-4 md:hidden">
+                <div className="flex gap-1 items-center">
+                  <SidebarTrigger className="-ml-1" />
+                  <span className="font-bold">YATA</span>
                 </div>
-              </Link>
-            </div>
-            <div className="flex gap-3">
-              <SignedOut>
-                <ModeToggle />
-                <SignInButton>Login</SignInButton>
-              </SignedOut>
+                <SignedOut>
+                  <ModeToggle />
+                  <SignInButton>Login</SignInButton>
+                </SignedOut>
+                <SignedIn>
+                  <div className="flex gap-2">
+                    <ModeToggle />
+                    <CustomUserButton />
+                  </div>
+                </SignedIn>
+              </header>
+              {/* Desktop Header for Sidebar */}
+              <header className="md:flex justify-between items-center p-4 gap-4 h-[8vh] border-b hidden">
+                <div className="flex items-center gap-2">
+                  <SidebarTrigger className="-ml-1" />
+                  <SmartHeading />
+                </div>
+                <div className="flex gap-3">
+                  <SignedOut>
+                    <ModeToggle />
+                    <SignInButton>Login</SignInButton>
+                  </SignedOut>
 
-              <SignedIn>
-                <Link href="/">
-                  <Button
-                    className="flex items-center gap-2 text-sm font-medium"
-                    variant={"outline"}
-                  >
-                    <HomeIcon className="size-4" />
-                  </Button>
-                </Link>
-                <ModeToggle />
-                <OrganizationSwitcher
-                  afterSelectOrganizationUrl={"/org/:slug"}
-                  afterSelectPersonalUrl={"/user/:id"}
-                />
-                <CustomUserButton />
-              </SignedIn>
-            </div>
-          </header>
-          <div className="mt-2 h-[92vh]">{children}</div>
+                  <SignedIn>
+                    <Link href="/">
+                      <Button
+                        className="flex items-center gap-2 text-sm font-medium"
+                        variant={"outline"}
+                      >
+                        <HomeIcon className="size-4" />
+                      </Button>
+                    </Link>
+                    <ModeToggle />
+                    <OrganizationSwitcher
+                      afterSelectOrganizationUrl={"/org/:slug"}
+                      afterSelectPersonalUrl={"/user/:id"}
+                    />
+                    <CustomUserButton />
+                  </SignedIn>
+                </div>
+              </header>
+              <div className="flex-1 overflow-y-auto">{children}</div>
+            </SidebarInset>
+          </SidebarProvider>
         </Providers>
       </body>
     </html>
