@@ -20,6 +20,7 @@ func main() {
 
 	if err != nil {
 		log.Fatal("Failed to connect to the database", err)
+		return
 	}
 
 	defer pool.Close()

@@ -10,23 +10,32 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@workspace/ui/components/sidebar";
-import { Ticket, Settings, Users, Home } from "lucide-react";
+import { Ticket, Users, Home } from "lucide-react";
+import { auth } from "@clerk/nextjs/server";
 
-const data = {
-  navMain: [
-    {
-      title: "Navigation",
-      items: [
-        { title: "Home", url: "/", icon: Home },
-        { title: "Tickets", url: "/tickets", icon: Ticket },
-        { title: "Team", url: "/team", icon: Users },
-        { title: "Settings", url: "/settings", icon: Settings },
-      ],
-    },
-  ],
-} as const;
-
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export async function AppSidebar({
+  ...props
+}: React.ComponentProps<typeof Sidebar>) {
+  const { userId, orgSlug } = await auth();
+  const data = {
+    navMain: [
+      {
+        title: "Navigation",
+        items: [
+          { title: "Home", url: "/", icon: Home },
+          {
+            title: "Tickets",
+            url: orgSlug
+              ? `/org/${orgSlug}/tickets`
+              : `/user/${userId}/tickets`,
+            icon: Ticket,
+          },
+          { title: "Team Chat", url: "/team", icon: Users },
+          // { title: "Settings", url: "/settings", icon: Settings },
+        ],
+      },
+    ],
+  } as const;
   return (
     <Sidebar {...props}>
       <SidebarHeader>

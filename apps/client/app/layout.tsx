@@ -85,8 +85,8 @@ export default function RootLayout({
                     </Link>
                     <ModeToggle />
                     <OrganizationSwitcher
-                      afterSelectOrganizationUrl={"/org/:slug"}
-                      afterSelectPersonalUrl={"/user/:id"}
+                      afterSelectOrganizationUrl={"/org/:slug/tickets"}
+                      afterSelectPersonalUrl={"/user/:id/tickets"}
                     />
                     <CustomUserButton />
                   </SignedIn>
