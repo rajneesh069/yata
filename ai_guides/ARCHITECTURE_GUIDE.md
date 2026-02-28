@@ -326,7 +326,12 @@ export async function apiPost<T>(path: string, body: unknown): Promise<T> {
 }
 ```
 
-### Go Side — Full Auth Middleware
+### Go Side — Auth Middleware (Using Clerk's Built-in Middleware)
+
+Clerk's SDK provides `RequireHeaderAuthorization` which handles JWT verification **with built-in JWKS caching** (1hr TTL). Since it wraps `http.Handler` (not Gin's `gin.HandlerFunc`), we use a small adapter.
+
+> **Why Clerk's built-in over custom?**
+> Our custom `jwt.Verify()` call hits Clerk's JWKS endpoint on **every request**. Clerk's built-in middleware caches the public key for 1 hour, which is faster and won't get rate-limited.
 
 ```go
 // internal/config/config.go
@@ -339,9 +344,10 @@ import (
 )
 
 type Config struct {
-    DATABASE_URL     string
-    PORT             string
-    CLERK_SECRET_KEY string
+    DATABASE_URL               string
+    PORT                       string
+    CLERK_SECRET_KEY           string
+    CLERK_WEBHOOK_SIGNING_SECRET string
 }
 
 func LoadConfig() (*Config, error) {
@@ -352,9 +358,10 @@ func LoadConfig() (*Config, error) {
     }
 
     config := &Config{
-        DATABASE_URL:     os.Getenv("DATABASE_URL"),
-        PORT:             os.Getenv("PORT"),
-        CLERK_SECRET_KEY: os.Getenv("CLERK_SECRET_KEY"),
+        DATABASE_URL:               os.Getenv("DATABASE_URL"),
+        PORT:                       os.Getenv("PORT"),
+        CLERK_SECRET_KEY:           os.Getenv("CLERK_SECRET_KEY"),
+        CLERK_WEBHOOK_SIGNING_SECRET: os.Getenv("CLERK_WEBHOOK_SIGNING_SECRET"),
     }
 
     return config, nil
@@ -367,67 +374,41 @@ package middlewares
 
 import (
     "net/http"
-    "strings"
 
-    "github.com/clerk/clerk-sdk-go/v2/jwt"
-    "github.com/clerk/clerk-sdk-go/v2/user"
+    "github.com/clerk/clerk-sdk-go/v2"
+    clerkhttp "github.com/clerk/clerk-sdk-go/v2/http"
     "github.com/gin-gonic/gin"
-
-    "yata/apps/server/internal/repository"
 )
 
-// ClerkAuthMiddleware verifies the JWT and sets userId in the Gin context
+// ClerkAuthMiddleware wraps Clerk's built-in RequireHeaderAuthorization
+// for use with Gin. It verifies the JWT, caches JWKS keys (1hr TTL),
+// and puts SessionClaims into the request context.
 func ClerkAuthMiddleware() gin.HandlerFunc {
+    // Clerk's built-in middleware — handles:
+    // 1. Extracting Bearer token from Authorization header
+    // 2. Fetching & caching JWKS public keys
+    // 3. Verifying JWT signature + expiry
+    // 4. Setting SessionClaims in request context
+    clerkMiddleware := clerkhttp.RequireHeaderAuthorization()
+
     return func(c *gin.Context) {
-        authHeader := c.GetHeader("Authorization")
-        if authHeader == "" {
-            c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
-                "error": "Missing Authorization header",
-            })
-            return
-        }
+        // Wrap Gin's handler chain as an http.Handler for Clerk's middleware
+        handler := clerkMiddleware(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+            // Transfer enriched context (with claims) back to Gin
+            c.Request = r
+            c.Next()
+        }))
 
-        token := strings.TrimPrefix(authHeader, "Bearer ")
-        if token == authHeader {
-            c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
-                "error": "Invalid Authorization format. Expected: Bearer <token>",
-            })
-            return
-        }
-
-        // Verify JWT using Clerk's JWKS
-        claims, err := jwt.Verify(c.Request.Context(), &jwt.VerifyParams{
-            Token: token,
-        })
-
-        if err != nil {
-            c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
-                "error": "Invalid or expired token",
-            })
-            return
-        }
-
-        // Set Clerk user ID in context for downstream handlers
-        c.Set("clerkUserId", claims.Subject)
-
-        // Optional: extract org info from custom claims
-        if orgID, ok := claims.Extra["org_id"].(string); ok {
-            c.Set("orgId", orgID)
-        }
-        if orgRole, ok := claims.Extra["org_role"].(string); ok {
-            c.Set("orgRole", orgRole)
-        }
-
-        c.Next()
+        handler.ServeHTTP(c.Writer, c.Request)
     }
 }
 
-// RequireOrg middleware — use AFTER ClerkAuthMiddleware
-// Ensures the user has an active organization selected
+// RequireOrg middleware — use AFTER ClerkAuthMiddleware.
+// Ensures the user has an active organization selected.
 func RequireOrg() gin.HandlerFunc {
     return func(c *gin.Context) {
-        orgId, exists := c.Get("orgId")
-        if !exists || orgId == "" {
+        claims, ok := clerk.SessionClaimsFromContext(c.Request.Context())
+        if !ok || claims.ActiveOrganizationID == "" {
             c.AbortWithStatusJSON(http.StatusForbidden, gin.H{
                 "error": "No organization selected",
             })
@@ -435,6 +416,72 @@ func RequireOrg() gin.HandlerFunc {
         }
         c.Next()
     }
+}
+```
+
+#### Accessing Claims in Handlers
+
+`SessionClaims` has first-class fields for org info — **no type assertions needed**:
+
+```go
+// In any handler after ClerkAuthMiddleware runs:
+func listTicketsHandler(pool *pgxpool.Pool) gin.HandlerFunc {
+    return func(c *gin.Context) {
+        // Clerk's helper reads claims from request context
+        claims, ok := clerk.SessionClaimsFromContext(c.Request.Context())
+        if !ok {
+            c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+            return
+        }
+
+        // Standard JWT claims
+        userId := claims.Subject                          // "user_2nFbKl9xRz"
+
+        // Clerk-specific org claims (first-class fields, not a map)
+        orgId := claims.ActiveOrganizationID              // "org_abc123" or ""
+        orgSlug := claims.ActiveOrganizationSlug          // "my-startup" or ""
+        orgRole := claims.ActiveOrganizationRole          // "org:admin" or ""
+
+        // Built-in permission/role helpers
+        if claims.HasPermission("org:tickets:manage") {
+            // user can manage tickets
+        }
+        if claims.HasRole("org:admin") {
+            // user is admin (prefer HasPermission over HasRole)
+        }
+
+        // ... use userId, orgId to scope your DB queries
+    }
+}
+```
+
+#### SessionClaims Struct (from clerk-sdk-go source)
+
+```go
+// What jwt.Verify() / clerk.SessionClaimsFromContext() returns:
+type SessionClaims struct {
+    RegisteredClaims                          // sub, iss, aud, exp, iat, nbf, jti
+    Claims                                    // Clerk-specific fields (below)
+    Custom any `json:"-"`                     // For your own custom claims
+}
+
+type RegisteredClaims struct {
+    Subject   string   `json:"sub"`           // Clerk user ID
+    Issuer    string   `json:"iss"`
+    Audience  []string `json:"aud"`
+    Expiry    *int64   `json:"exp"`
+    IssuedAt  *int64   `json:"iat"`
+    // ...
+}
+
+type Claims struct {
+    SessionID                     string   `json:"sid"`
+    ActiveOrganizationID          string   `json:"org_id"`
+    ActiveOrganizationSlug        string   `json:"org_slug"`
+    ActiveOrganizationRole        string   `json:"org_role"`
+    ActiveOrganizationPermissions []string `json:"org_permissions"`
+    AuthorizedParty               string   `json:"azp"`
+    // ...
 }
 ```
 
@@ -475,7 +522,7 @@ func main() {
     router.GET("/", func(c *gin.Context) {
         c.JSON(http.StatusOK, gin.H{"message": "Server Healthy.", "code": 200})
     })
-    router.POST("/webhooks/clerk", clerkWebhookHandler(pool))
+    router.POST("/webhooks/clerk", clerkWebhookHandler(pool, cfg.CLERK_WEBHOOK_SIGNING_SECRET))
 
     // Protected routes (auth required)
     api := router.Group("/api")
@@ -484,7 +531,28 @@ func main() {
         // User routes
         api.GET("/me", getMeHandler(pool))
 
+        // ──────────────────────────────────────────────
+        // Personal tickets (no org required)
+        // Any authenticated user can CRUD their own tickets
+        // and chat with AI about them (no team chat)
+        // ──────────────────────────────────────────────
+        personal := api.Group("/tickets")
+        {
+            personal.GET("", listPersonalTicketsHandler(pool))
+            personal.POST("", createPersonalTicketHandler(pool))
+            personal.GET("/:ticketId", getPersonalTicketHandler(pool))
+            personal.PATCH("/:ticketId", updatePersonalTicketHandler(pool))
+            personal.DELETE("/:ticketId", deletePersonalTicketHandler(pool))
+
+            // AI chat on personal tickets (1:1 with AI, no team members)
+            personal.GET("/:ticketId/chat", listPersonalChatHandler(pool))
+            personal.POST("/:ticketId/chat", sendPersonalChatHandler(pool))   // AI responds
+        }
+
+        // ──────────────────────────────────────────────
         // Org-scoped routes (require active org)
+        // Team tickets with full team chat + AI
+        // ──────────────────────────────────────────────
         org := api.Group("/orgs/:slug")
         org.Use(middlewares.RequireOrg())
         {
@@ -493,6 +561,11 @@ func main() {
             org.GET("/tickets/:ticketId", getTicketHandler(pool))
             org.PATCH("/tickets/:ticketId", updateTicketHandler(pool))
             org.DELETE("/tickets/:ticketId", deleteTicketHandler(pool))
+
+            // Team chat on org tickets (tag members, AI participates)
+            org.GET("/tickets/:ticketId/chat", listChatHandler(pool))
+            org.POST("/tickets/:ticketId/chat", sendChatHandler(pool))
+            org.POST("/tickets/:ticketId/chat/ai", askAIChatHandler(pool))    // AI in team context
         }
     }
 

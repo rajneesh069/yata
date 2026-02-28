@@ -1,3 +1,4 @@
+import { HitMe } from "@/components/hit-me";
 import { UserTickets } from "@/components/user-tickets";
 
 export default async function UserPage({
@@ -6,5 +7,10 @@ export default async function UserPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  return <UserTickets userId={id} />;
+  return (
+    <div>
+      <UserTickets userId={id} />;
+      <HitMe />
+    </div>
+  );
 }

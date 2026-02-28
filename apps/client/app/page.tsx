@@ -1,3 +1,4 @@
+import { HitMe } from "@/components/hit-me";
 import { auth } from "@clerk/nextjs/server";
 export default async function Page() {
   const { userId, orgId, orgRole, orgSlug, getToken } = await auth();
@@ -12,6 +13,7 @@ export default async function Page() {
       <div>Org ID: {orgId}</div>
       <div>Org Role: {orgRole}</div>
       <div>Org Slug: {orgSlug}</div>
+      <HitMe />
     </div>
   );
 }
