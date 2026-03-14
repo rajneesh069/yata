@@ -92,7 +92,7 @@ export default function RootLayout({
                   </SignedIn>
                 </div>
               </header>
-              <div className="flex-1 overflow-y-auto">{children}</div>
+              <div className="flex-1">{children}</div>
             </SidebarInset>
           </SidebarProvider>
         </Providers>

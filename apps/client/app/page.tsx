@@ -1,19 +1,13 @@
-import { HitMe } from "@/components/hit-me";
 import { auth } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 export default async function Page() {
-  const { userId, orgId, orgRole, orgSlug, getToken } = await auth();
-  console.log("User ID: ", userId);
-  console.log("Org ID: ", orgId);
-  console.log("Org Role: ", orgRole);
-  console.log("Org Slug: ", orgSlug);
-  console.log("Get Token: ", await getToken());
+  const { userId, isAuthenticated } = await auth();
+
+  if (isAuthenticated) {
+    redirect(`/user/${userId}/tickets`);
+  }
+
   return (
-    <div className="flex flex-col gap-2 items-center justify-center">
-      <div>User ID: {userId}</div>
-      <div>Org ID: {orgId}</div>
-      <div>Org Role: {orgRole}</div>
-      <div>Org Slug: {orgSlug}</div>
-      <HitMe />
-    </div>
+    <div className="flex flex-col gap-2 items-center justify-center">Hey</div>
   );
 }

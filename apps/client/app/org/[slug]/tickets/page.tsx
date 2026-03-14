@@ -1,5 +1,3 @@
-import { HitMe } from "@/components/hit-me";
-
 export default async function OrgPage({
   params,
 }: {
@@ -7,10 +5,5 @@ export default async function OrgPage({
 }) {
   const { slug } = await params;
 
-  return (
-    <div>
-      Slug: {slug}
-      <HitMe />
-    </div>
-  );
+  return <div>Slug: {slug}</div>;
 }

@@ -12,6 +12,7 @@ import {
 } from "@workspace/ui/components/sidebar";
 import { Ticket, Users, Home } from "lucide-react";
 import { auth } from "@clerk/nextjs/server";
+import Link from "next/link";
 
 export async function AppSidebar({
   ...props
@@ -30,7 +31,13 @@ export async function AppSidebar({
               : `/user/${userId}/tickets`,
             icon: Ticket,
           },
-          { title: "Team Chat", url: "/team", icon: Users },
+          {
+            title: "Chat",
+            url: orgSlug
+              ? `/org/${orgSlug}/team-chat`
+              : `/user/${userId}/ai-chat`,
+            icon: Users,
+          },
           // { title: "Settings", url: "/settings", icon: Settings },
         ],
       },
@@ -58,10 +65,10 @@ export async function AppSidebar({
                     className={`${subItem.title === "Home" ? "md:hidden" : undefined}`}
                   >
                     <SidebarMenuButton asChild>
-                      <a href={subItem.url}>
+                      <Link href={subItem.url}>
                         {subItem.icon && <subItem.icon />}
                         <span>{subItem.title}</span>
-                      </a>
+                      </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 ))}

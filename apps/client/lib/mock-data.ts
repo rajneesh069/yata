@@ -1,0 +1,82 @@
+import { Ticket } from "@/types/ticket";
+
+export const mockTickets: Ticket[] = [
+  {
+    id: "3d6f0a32-8c22-4c0a-9d21-9f6c7f6d1a11",
+    title: "Login page throws 500 error",
+    description:
+      "Users report a 500 error when attempting to login with Google OAuth.",
+    raisedById: "9e7e1c90-b5b0-4b77-b9e2-37d1c4f0a001",
+    status: "OPEN",
+    tags: ["auth", "backend", "critical"],
+    createdAt: new Date("2026-03-10T10:15:00Z"),
+    updatedAt: new Date("2026-03-10T10:15:00Z"),
+  },
+  {
+    id: "e4a94d0f-5b9a-4c7b-92a4-7d9c5cbb8d22",
+    title: "UI misalignment on dashboard widgets",
+    description:
+      "Widgets overlap when screen width is between 1024px and 1200px.",
+    raisedById: "6c45f2c4-7d2a-4a55-88c4-0c61b7c3d102",
+    status: "IN_PROGRESS",
+    tags: ["frontend", "ui", "responsive"],
+    createdAt: new Date("2026-03-09T14:32:00Z"),
+    updatedAt: new Date("2026-03-11T08:05:00Z"),
+  },
+  {
+    id: "1c83e9b4-3b7a-4ef1-9c1c-3a8e5c91f433",
+    title: "Email notifications not being sent",
+    description: null,
+    raisedById: "b2f6c3d0-1d93-4c2e-a3e1-52d7e4c0c203",
+    status: "OPEN",
+    tags: ["notifications", "email", "bug"],
+    createdAt: new Date("2026-03-08T09:20:00Z"),
+    updatedAt: new Date("2026-03-08T09:20:00Z"),
+  },
+  {
+    id: "7a2f5d64-9e19-4c61-b3f5-9b6f8e8b7444",
+    title: "Slow API response on ticket listing",
+    description:
+      "The /tickets endpoint takes ~2.5 seconds to respond when the database contains more than 500 records. Initial investigation suggests the issue might be related to inefficient joins in the query layer, missing indexes on frequently filtered columns, or excessive serialization overhead in the API layer. We should profile the query execution plan and inspect the ORM-generated SQL to determine the root cause.",
+    raisedById: "d8c1b7f9-6c5e-4f5e-9a8a-5a2c4b0a3104",
+    status: "IN_REVIEW",
+    tags: ["performance", "backend", "database"],
+    createdAt: new Date("2026-03-07T12:00:00Z"),
+    updatedAt: new Date("2026-03-12T15:30:00Z"),
+  },
+  {
+    id: "a5c9d71e-44fa-4f9b-8b7b-21c3e9f5e555",
+    title: "Dark mode toggle not persisting",
+    description:
+      "When users toggle dark mode from the settings panel, the UI updates correctly for the current session but resets back to light mode after a full page refresh. The issue likely stems from the theme preference not being persisted in localStorage or cookies. We should ensure the theme state is written to persistent storage and rehydrated correctly on application boot.",
+    raisedById: "0f2c1e87-3b55-4a7d-9c2b-8a9f7e6c4205",
+    status: "CLOSED",
+    tags: ["frontend", "theme", "localStorage"],
+    createdAt: new Date("2026-03-05T16:10:00Z"),
+    updatedAt: new Date("2026-03-06T09:45:00Z"),
+  },
+
+  // long description examples
+  {
+    id: "b9f1f1f4-4e1d-4e58-9e3b-bd98a1c2a901",
+    title: "Investigate memory leak in background worker",
+    description:
+      "Over the past few deployments we've observed a steady increase in memory usage in the background worker responsible for processing notification events. After several hours of uptime the worker's memory footprint grows to nearly double its initial allocation, eventually triggering container restarts in our orchestration environment. This may be related to unbounded in-memory queues, lingering references preventing garbage collection, or a third-party dependency caching too aggressively. We should instrument heap snapshots and monitor object retention paths to identify the exact source of the leak.",
+    raisedById: "14e6c2f1-bf7a-4e4e-b6b1-2b5a7fefc302",
+    status: "OPEN",
+    tags: ["backend", "memory", "infra"],
+    createdAt: new Date("2026-03-04T11:40:00Z"),
+    updatedAt: new Date("2026-03-04T11:40:00Z"),
+  },
+  {
+    id: "c3d4a9bb-7c35-45b4-9b92-5db3b0e23903",
+    title: "Improve onboarding flow for new users",
+    description:
+      "Several users have reported confusion during the onboarding process, particularly when connecting external integrations and creating their first project. The current flow requires users to navigate across multiple pages without clear guidance about the recommended order of steps. A potential improvement would be introducing a guided onboarding checklist that progressively reveals tasks such as creating a workspace, inviting teammates, and configuring integrations. This would likely improve activation metrics and reduce early user churn.",
+    raisedById: "2b91c7e0-ef91-46e3-8f9a-6e2d3e42c404",
+    status: "OPEN",
+    tags: ["product", "ux", "frontend"],
+    createdAt: new Date("2026-03-03T09:10:00Z"),
+    updatedAt: new Date("2026-03-03T09:10:00Z"),
+  },
+];

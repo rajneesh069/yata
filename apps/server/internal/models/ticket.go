@@ -8,6 +8,7 @@ const (
 	StatusOpen           TicketStatus = "OPEN"
 	StatusInProgress     TicketStatus = "IN_PROGRESS"
 	StatusReviewPending  TicketStatus = "REVIEW_PENDING"
+	StatusInReview       TicketStatus = "IN_REVIEW"
 	StatusReviewApproved TicketStatus = "REVIEW_APPROVED"
 	StatusReviewRejected TicketStatus = "REVIEW_REJECTED"
 	StatusMergeApproved  TicketStatus = "MERGE_APPROVED"
@@ -17,7 +18,7 @@ const (
 type Ticket struct {
 	ID          string       `json:"id" db:"id"`
 	Title       string       `json:"title" db:"title"`
-	Description string       `json:"description" db:"description"`
+	Description *string      `json:"description" db:"description"`
 	RaisedByID  string       `json:"raisedById" db:"raised_by_id"` // FK to user.id
 	Status      TicketStatus `json:"status" db:"status"`
 	Tags        []string     `json:"tags" db:"tags"`
