@@ -32,6 +32,7 @@ import {
   SidebarTrigger,
 } from "@workspace/ui/components/sidebar";
 import { SmartHeading } from "@/components/smart-heading";
+import { Toaster } from "@workspace/ui/components/sonner";
 
 export default function RootLayout({
   children,
@@ -92,7 +93,8 @@ export default function RootLayout({
                   </SignedIn>
                 </div>
               </header>
-              <div className="flex-1">{children}</div>
+              <main className="flex-1">{children}</main>
+              <Toaster />
             </SidebarInset>
           </SidebarProvider>
         </Providers>
