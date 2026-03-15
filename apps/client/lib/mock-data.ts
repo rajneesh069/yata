@@ -13,6 +13,17 @@ export const mockTickets: Ticket[] = [
     updatedAt: new Date("2026-03-10T10:15:00Z"),
   },
   {
+    id: "7f2a1b9c-4d33-4e8b-8a22-1c5d9e0f3b44",
+    title: "Intermittent Database Deadlock on Batch Order Processing",
+    description:
+      "DETAILED INCIDENT REPORT AND REPRODUCTION STEPS:\n\nSummary:\nDuring high-load periods (specifically between 09:00 and 11:00 UTC), the asynchronous worker service responsible for processing batch orders frequently encounters database deadlocks. This results in failed transactions and inconsistent inventory states.\n\nTechnical Deep Dive:\nInvestigation of the PostgreSQL logs reveals that the deadlock occurs when the `OrderProcessor` service attempts to update the 'inventory_counts' table while simultaneously the `RefundService` is holding a row-level lock on the same 'product_id' entries. The trace indicates a circular dependency in the locking order: \n1. Transaction A (BatchOrder) locks Row X then tries to lock Row Y.\n2. Transaction B (RefundRequest) locks Row Y then tries to lock Row X.\n\nSteps to Reproduce:\n1. Initialize a load testing environment with 50+ concurrent virtual users.\n2. Trigger a CSV import of 10,000 order line items via the Admin Dashboard.\n3. While the import is at 45% completion, initiate multiple refund requests for products included in the middle of the CSV file.\n4. Observe the 'Internal Server Error' in the worker logs and the 'Deadlock detected' message in the DB engine.\n\nEnvironment Details:\n- Environment: Production-Mirror (Staging)\n- Database: PostgreSQL 14.5\n- ORM: Prisma v5.2\n- Infrastructure: AWS RDS (m5.xlarge)\n\nProposed Mitigation:\nWe need to standardize the sequence in which resources are accessed across all services. Specifically, we should implement a sorting algorithm on 'product_id' before initiating transaction locks to ensure that different processes always request locks in the same chronological order, thereby preventing the circular wait condition.\n\nLogged Error:\n'ERROR: deadlock detected. Detail: Process 14002 waits for ShareLock on transaction 88291; blocked by process 14005. Process 14005 waits for ShareLock on transaction 88290; blocked by process 14002.'",
+    raisedById: "2a11b090-c4d1-4221-a4f2-99d0c2f1a882",
+    status: "OPEN",
+    tags: ["database", "high-load", "backend", "critical"],
+    createdAt: new Date("2026-03-15T14:20:00Z"),
+    updatedAt: new Date("2026-03-15T14:20:00Z"),
+  },
+  {
     id: "e4a94d0f-5b9a-4c7b-92a4-7d9c5cbb8d22",
     title: "UI misalignment on dashboard widgets",
     description:

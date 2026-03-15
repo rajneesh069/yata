@@ -14,7 +14,7 @@ export const TicketStatusEnum = z.enum([
 export const TicketType = z.object({
   id: z.uuid(),
   title: z.string().nonempty(),
-  description: z.string().nullable(),
+  description: z.string().optional(),
   raisedById: z.uuid(),
   status: TicketStatusEnum,
   tags: z.array(z.string()),
