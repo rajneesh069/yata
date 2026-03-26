@@ -7,6 +7,7 @@ import { dark } from "@clerk/themes";
 import { TooltipProvider } from "@workspace/ui/components/tooltip";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { getQueryClient } from "@/lib/react";
+import { NuqsAdapter } from "nuqs/adapters/next";
 
 function ClerkProviderWithTheme({ children }: { children: React.ReactNode }) {
   const { resolvedTheme } = useTheme();
@@ -33,7 +34,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
       <TooltipProvider>
         <ClerkProviderWithTheme>
           <QueryClientProvider client={getQueryClient()}>
-            {children}
+            <NuqsAdapter>{children}</NuqsAdapter>
           </QueryClientProvider>
         </ClerkProviderWithTheme>
       </TooltipProvider>
