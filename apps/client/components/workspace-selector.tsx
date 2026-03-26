@@ -1,31 +1,17 @@
-import { getAllProjects } from "@/app/actions/getAllProjects";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@workspace/ui/components/select";
+import { getAllWorkspaces } from "@/app/actions/getAllWorkspaces";
+import { WorkspaceSelectorClient } from "./workspace-selector-client";
+import { auth } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 
 export async function WorkspaceSelector() {
-  const allProjects = await getAllProjects();
+  const allWorkspaces = await getAllWorkspaces();
+  const { userId, orgId } = await auth();
+
+  if (!userId && !orgId) {
+    redirect("/sign-in");
+  }
+
   return (
-    <Select>
-      <SelectTrigger className="w-full max-w-32 md:max-w-48">
-        <SelectValue placeholder={allProjects[0]?.name} />
-      </SelectTrigger>
-      <SelectContent>
-        <SelectGroup>
-          <SelectLabel>Projects</SelectLabel>
-          {allProjects.map((project) => (
-            <SelectItem key={project.id} value={project.id}>
-              {project.name}
-            </SelectItem>
-          ))}
-        </SelectGroup>
-      </SelectContent>
-    </Select>
+    <WorkspaceSelectorClient workspaces={allWorkspaces} id={orgId ?? userId} />
   );
 }

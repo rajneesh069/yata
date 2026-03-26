@@ -1,19 +1,10 @@
 import z from "zod";
-
-export const TicketStatusEnum = z.enum([
-  "OPEN",
-  "IN_PROGRESS",
-  "REVIEW_PENDING",
-  "IN_REVIEW",
-  "REVIEW_APPROVED",
-  "REVIEW_REJECTED",
-  "MERGE_APPROVED",
-  "CLOSED",
-]);
+import { TicketStatusEnum } from "./enums";
 
 export const TicketType = z.object({
   id: z.uuid(),
-  projectId: z.uuid(),
+  workspaceId: z.uuid(),
+  taskName: z.string().nonempty(),
   title: z.string().nonempty(),
   description: z.string().nullable(),
   raisedById: z.uuid(),

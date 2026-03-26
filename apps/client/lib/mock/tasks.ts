@@ -1,0 +1,121 @@
+import { Task } from "@/types/task";
+
+export const mockTasks: Task[] = [
+  // ===== FRONTEND PLATFORM =====
+  {
+    workspaceId: "11111111-1111-1111-1111-111111111111",
+    scopeId: "aaaaaaa1",
+    scope: "ORG",
+    name: "Auth",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    workspaceId: "11111111-1111-1111-1111-111111111111",
+    scopeId: "aaaaaaa1",
+    scope: "ORG",
+    name: "UI/UX",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    workspaceId: "11111111-1111-1111-1111-111111111111",
+    scopeId: "aaaaaaa1",
+    scope: "ORG",
+    name: "Performance",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    workspaceId: "11111111-1111-1111-1111-111111111111",
+    scopeId: "aaaaaaa1",
+    scope: "ORG",
+    name: "Accessibility",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    workspaceId: "11111111-1111-1111-1111-111111111111",
+    scopeId: "aaaaaaa1",
+    scope: "ORG",
+    name: "Testing",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+
+  // ===== BACKEND SYSTEMS =====
+  {
+    workspaceId: "22222222-2222-2222-2222-222222222222",
+    scopeId: "aaaaaaa1",
+    scope: "ORG",
+    name: "API",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    workspaceId: "22222222-2222-2222-2222-222222222222",
+    scopeId: "aaaaaaa1",
+    scope: "ORG",
+    name: "Database",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    workspaceId: "22222222-2222-2222-2222-222222222222",
+    scopeId: "aaaaaaa1",
+    scope: "ORG",
+    name: "Infra",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    workspaceId: "22222222-2222-2222-2222-222222222222",
+    scopeId: "aaaaaaa1",
+    scope: "ORG",
+    name: "Security",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    workspaceId: "22222222-2222-2222-2222-222222222222",
+    scopeId: "aaaaaaa1",
+    scope: "ORG",
+    name: "Caching",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+
+  // ===== PERSONAL LAB =====
+  {
+    workspaceId: "33333333-3333-3333-3333-333333333333",
+    scopeId: "bbbbbbb2",
+    scope: "PERSONAL",
+    name: "Rust",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    workspaceId: "33333333-3333-3333-3333-333333333333",
+    scopeId: "bbbbbbb2",
+    scope: "PERSONAL",
+    name: "C++",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    workspaceId: "33333333-3333-3333-3333-333333333333",
+    scopeId: "bbbbbbb2",
+    scope: "PERSONAL",
+    name: "Systems Design",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    workspaceId: "33333333-3333-3333-3333-333333333333",
+    scopeId: "bbbbbbb2",
+    scope: "PERSONAL",
+    name: "Networking",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+];

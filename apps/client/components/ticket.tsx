@@ -1,6 +1,6 @@
 "use client";
 
-import { Ticket, TicketStatusEnum } from "@/types/ticket";
+import { Ticket } from "@/types/ticket";
 import { Badge } from "@workspace/ui/components/badge";
 import { Button } from "@workspace/ui/components/button";
 import {
@@ -50,6 +50,7 @@ import {
   SelectValue,
 } from "@workspace/ui/components/select";
 import { useRef, useState } from "react";
+import { TicketStatusEnum } from "@/types/enums";
 
 const formSchema = z.object({
   title: z.string(),
@@ -70,7 +71,7 @@ export function TicketCard({ ticket }: { ticket: Ticket }) {
   return (
     <>
       <Dialog open={openEditingForm} onOpenChange={setOpenEditingForm}>
-        <Card className="border border-t border-b rounded-none sm:max-w-[450px]">
+        <Card className="border border-t border-b rounded-none max-w-[320px] md:min-w-[400px]">
           <CardHeader className="justify-start w-full">
             <p>{ticket.title}</p>
           </CardHeader>
