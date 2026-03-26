@@ -46,25 +46,7 @@ export default function RootLayout({
           <SidebarProvider defaultOpen={false}>
             <AppSidebar />
             <SidebarInset>
-              {/* Mobile Header for Sidebar */}
-              <header className="flex justify-between h-14 items-center gap-2 border-b px-4 md:hidden">
-                <div className="flex gap-1 items-center">
-                  <SidebarTrigger className="-ml-1" />
-                  <span className="font-bold">YATA</span>
-                </div>
-                <SignedOut>
-                  <ModeToggle />
-                  <SignInButton>Login</SignInButton>
-                </SignedOut>
-                <SignedIn>
-                  <div className="flex gap-2">
-                    <ModeToggle />
-                    <CustomUserButton />
-                  </div>
-                </SignedIn>
-              </header>
-              {/* Desktop Header for Sidebar */}
-              <header className="md:flex justify-between items-center p-4 gap-4 h-[8vh] border-b hidden">
+              <header className="flex justify-between items-center p-4 gap-4 h-[8vh] border-b">
                 <div className="flex items-center gap-2">
                   <SidebarTrigger className="-ml-1" />
                   <SmartHeading />
@@ -76,7 +58,7 @@ export default function RootLayout({
                   </SignedOut>
 
                   <SignedIn>
-                    <Link href="/">
+                    <Link href="/" className="md:block hidden">
                       <Button
                         className="flex items-center gap-2 text-sm font-medium"
                         variant={"outline"}
@@ -85,10 +67,12 @@ export default function RootLayout({
                       </Button>
                     </Link>
                     <ModeToggle />
-                    <OrganizationSwitcher
-                      afterSelectOrganizationUrl={"/org/:slug/tickets"}
-                      afterSelectPersonalUrl={"/user/:id/tickets"}
-                    />
+                    <div className="hidden md:block">
+                      <OrganizationSwitcher
+                        afterSelectOrganizationUrl={"/org/:slug/tickets"}
+                        afterSelectPersonalUrl={"/user/:id/tickets"}
+                      />
+                    </div>
                     <CustomUserButton />
                   </SignedIn>
                 </div>

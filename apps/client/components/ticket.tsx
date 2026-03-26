@@ -52,7 +52,7 @@ import {
 import { useRef, useState } from "react";
 
 const formSchema = z.object({
-  title: z.string().optional(),
+  title: z.string(),
   description: z.string().optional(),
   tags: z.array(z.string()),
 });
@@ -157,8 +157,8 @@ function TicketEditDialog({ ticket }: { ticket: Ticket }) {
   });
   function onSubmit(data: z.infer<typeof formSchema>) {
     const patchedData: z.infer<typeof formSchema> = {
-      title: data.title || ticket.title,
-      description: data.description || ticket.description,
+      title: data.title ?? ticket.title,
+      description: data.description ?? (ticket.description as string),
       tags: data.tags.length > 0 ? data.tags : ticket.tags,
     };
     console.log(patchedData);

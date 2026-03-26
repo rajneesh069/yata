@@ -1,4 +1,4 @@
-import { mockTickets } from "@/lib/mock-data";
+import { mockTickets } from "@/lib/mock/tickets";
 import { TicketBoard } from "./ticket-board";
 
 export function UserTickets({ userId }: { userId: string }) {

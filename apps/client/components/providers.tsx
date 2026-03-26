@@ -5,6 +5,8 @@ import { ThemeProvider as NextThemesProvider, useTheme } from "next-themes";
 import { ClerkProvider } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
 import { TooltipProvider } from "@workspace/ui/components/tooltip";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { getQueryClient } from "@/lib/react";
 
 function ClerkProviderWithTheme({ children }: { children: React.ReactNode }) {
   const { resolvedTheme } = useTheme();
@@ -29,7 +31,11 @@ export function Providers({ children }: { children: React.ReactNode }) {
       enableColorScheme
     >
       <TooltipProvider>
-        <ClerkProviderWithTheme>{children}</ClerkProviderWithTheme>
+        <ClerkProviderWithTheme>
+          <QueryClientProvider client={getQueryClient()}>
+            {children}
+          </QueryClientProvider>
+        </ClerkProviderWithTheme>
       </TooltipProvider>
     </NextThemesProvider>
   );
