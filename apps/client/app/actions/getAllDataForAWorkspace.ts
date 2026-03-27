@@ -4,6 +4,7 @@ import { Ticket } from "@/types/ticket";
 export async function getAllDataForAWorkspace(
   workspaceId: string,
 ): Promise<Map<string, Ticket[]>> {
+  if (!workspaceId) return new Map();
   await new Promise((resolve) => setTimeout(resolve, 3_000));
   const result: Map<string, Ticket[]> = new Map<string, Ticket[]>();
 

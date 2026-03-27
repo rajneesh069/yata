@@ -7,7 +7,7 @@ import { dark } from "@clerk/themes";
 import { TooltipProvider } from "@workspace/ui/components/tooltip";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { getQueryClient } from "@/lib/react";
-import { NuqsAdapter } from "nuqs/adapters/next";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 function ClerkProviderWithTheme({ children }: { children: React.ReactNode }) {
   const { resolvedTheme } = useTheme();

@@ -33,7 +33,7 @@ import {
 } from "@workspace/ui/components/sidebar";
 import { SmartHeading } from "@/components/smart-heading";
 import { Toaster } from "@workspace/ui/components/sonner";
-import { WorkspaceSelector } from "@/components/workspace-selector";
+import { WorkspaceSelector } from "@/components/workspace-selector/workspace-selector";
 import { Suspense } from "react";
 import { WorkspaceSelectorSkeleton } from "@/components/skeletons/workspace-selector-skeleton";
 

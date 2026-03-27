@@ -1,22 +1,18 @@
-import { getAllWorkspaces } from "@/app/actions/getAllWorkspaces";
 import { getAllDataForAWorkspace } from "@/app/actions/getAllDataForAWorkspace";
+import { getAllWorkspaces } from "@/app/actions/getAllWorkspaces";
 import { TicketBoard } from "@/components/ticket-board";
 import { redirect } from "next/navigation";
 
 export default async function UserPage({
-  params,
   searchParams,
 }: {
-  params: Promise<{ id: string }>;
   searchParams: Promise<{ w: string }>;
 }) {
-  const { id } = await params;
   const { w } = await searchParams;
-
   if (!w) {
-    const allProjects = await getAllWorkspaces();
-    if (allProjects[0]) {
-      redirect(`?w=${allProjects[0]?.id}`);
+    const allWorkspaces = await getAllWorkspaces();
+    if (allWorkspaces[0]) {
+      redirect(`?w=${allWorkspaces[0]?.id}`);
     }
   }
 
@@ -24,7 +20,7 @@ export default async function UserPage({
 
   return (
     <div>
-      <TicketBoard data={data} id={id} />
+      <TicketBoard data={data} />
     </div>
   );
 }

@@ -1,15 +1,7 @@
 import { Ticket } from "@/types/ticket";
 import { TicketCard } from "./ticket";
 
-export function TicketBoard({
-  data,
-  id,
-}: {
-  data: Map<string, Ticket[]>;
-  id: string;
-}) {
-  console.log({ id });
-
+export function TicketBoard({ data }: { data: Map<string, Ticket[]> }) {
   return (
     <div className="grid md:grid-flow-col gap-x-4 overflow-x-auto md:auto-cols-[minmax(400px, 1fr)]">
       {Array.from(data).map(([taskName, tickets]) => (
