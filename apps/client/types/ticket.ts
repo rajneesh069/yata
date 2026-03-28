@@ -1,7 +1,7 @@
 import z from "zod";
 import { TicketStatusEnum } from "./enums";
 
-export const TicketType = z.object({
+export const TicketSchema = z.object({
   id: z.uuid(),
   workspaceId: z.uuid(),
   taskName: z.string().nonempty(),
@@ -14,4 +14,4 @@ export const TicketType = z.object({
   updatedAt: z.date(),
 });
 
-export type Ticket = z.infer<typeof TicketType>;
+export type Ticket = z.infer<typeof TicketSchema>;

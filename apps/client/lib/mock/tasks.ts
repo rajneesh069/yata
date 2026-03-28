@@ -4,7 +4,7 @@ export const mockTasks: Task[] = [
   // ===== FRONTEND PLATFORM =====
   {
     workspaceId: "11111111-1111-1111-1111-111111111111",
-    scopeId: "aaaaaaa1",
+    ownerId: "aaaaaaa1",
     scope: "ORG",
     name: "Auth",
     createdAt: new Date(),
@@ -12,7 +12,7 @@ export const mockTasks: Task[] = [
   },
   {
     workspaceId: "11111111-1111-1111-1111-111111111111",
-    scopeId: "aaaaaaa1",
+    ownerId: "aaaaaaa1",
     scope: "ORG",
     name: "UI/UX",
     createdAt: new Date(),
@@ -20,7 +20,7 @@ export const mockTasks: Task[] = [
   },
   {
     workspaceId: "11111111-1111-1111-1111-111111111111",
-    scopeId: "aaaaaaa1",
+    ownerId: "aaaaaaa1",
     scope: "ORG",
     name: "Performance",
     createdAt: new Date(),
@@ -28,7 +28,7 @@ export const mockTasks: Task[] = [
   },
   {
     workspaceId: "11111111-1111-1111-1111-111111111111",
-    scopeId: "aaaaaaa1",
+    ownerId: "aaaaaaa1",
     scope: "ORG",
     name: "Accessibility",
     createdAt: new Date(),
@@ -36,7 +36,7 @@ export const mockTasks: Task[] = [
   },
   {
     workspaceId: "11111111-1111-1111-1111-111111111111",
-    scopeId: "aaaaaaa1",
+    ownerId: "aaaaaaa1",
     scope: "ORG",
     name: "Testing",
     createdAt: new Date(),
@@ -46,7 +46,7 @@ export const mockTasks: Task[] = [
   // ===== BACKEND SYSTEMS =====
   {
     workspaceId: "22222222-2222-2222-2222-222222222222",
-    scopeId: "aaaaaaa1",
+    ownerId: "aaaaaaa1",
     scope: "ORG",
     name: "API",
     createdAt: new Date(),
@@ -54,7 +54,7 @@ export const mockTasks: Task[] = [
   },
   {
     workspaceId: "22222222-2222-2222-2222-222222222222",
-    scopeId: "aaaaaaa1",
+    ownerId: "aaaaaaa1",
     scope: "ORG",
     name: "Database",
     createdAt: new Date(),
@@ -62,7 +62,7 @@ export const mockTasks: Task[] = [
   },
   {
     workspaceId: "22222222-2222-2222-2222-222222222222",
-    scopeId: "aaaaaaa1",
+    ownerId: "aaaaaaa1",
     scope: "ORG",
     name: "Infra",
     createdAt: new Date(),
@@ -70,7 +70,7 @@ export const mockTasks: Task[] = [
   },
   {
     workspaceId: "22222222-2222-2222-2222-222222222222",
-    scopeId: "aaaaaaa1",
+    ownerId: "aaaaaaa1",
     scope: "ORG",
     name: "Security",
     createdAt: new Date(),
@@ -78,7 +78,7 @@ export const mockTasks: Task[] = [
   },
   {
     workspaceId: "22222222-2222-2222-2222-222222222222",
-    scopeId: "aaaaaaa1",
+    ownerId: "aaaaaaa1",
     scope: "ORG",
     name: "Caching",
     createdAt: new Date(),
@@ -88,7 +88,7 @@ export const mockTasks: Task[] = [
   // ===== PERSONAL LAB =====
   {
     workspaceId: "33333333-3333-3333-3333-333333333333",
-    scopeId: "bbbbbbb2",
+    ownerId: "bbbbbbb2",
     scope: "PERSONAL",
     name: "Rust",
     createdAt: new Date(),
@@ -96,7 +96,7 @@ export const mockTasks: Task[] = [
   },
   {
     workspaceId: "33333333-3333-3333-3333-333333333333",
-    scopeId: "bbbbbbb2",
+    ownerId: "bbbbbbb2",
     scope: "PERSONAL",
     name: "C++",
     createdAt: new Date(),
@@ -104,7 +104,7 @@ export const mockTasks: Task[] = [
   },
   {
     workspaceId: "33333333-3333-3333-3333-333333333333",
-    scopeId: "bbbbbbb2",
+    ownerId: "bbbbbbb2",
     scope: "PERSONAL",
     name: "Systems Design",
     createdAt: new Date(),
@@ -112,7 +112,7 @@ export const mockTasks: Task[] = [
   },
   {
     workspaceId: "33333333-3333-3333-3333-333333333333",
-    scopeId: "bbbbbbb2",
+    ownerId: "bbbbbbb2",
     scope: "PERSONAL",
     name: "Networking",
     createdAt: new Date(),
