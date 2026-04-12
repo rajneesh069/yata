@@ -1,4 +1,4 @@
-CREATE TABLE tickets IF NOT EXISTS (
+CREATE TABLE IF NOT EXISTS tickets (
     id UUID PRIMARY KEY NOT NULL DEFAULT gen_random_uuid(),
     org_id UUID NOT NULL REFERENCES organizations(id) ON DELETE CASCADE,
     creator_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE, 
