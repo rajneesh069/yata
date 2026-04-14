@@ -1,0 +1,5 @@
+DROP TABLE IF EXISTS tasks;
+
+DROP TYPE IF EXISTS workspace_scope;
+
+DROP TABLE IF EXISTS workspaces;

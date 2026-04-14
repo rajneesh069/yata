@@ -1,3 +1,0 @@
-DROP TRIGGER IF EXISTS update_user_modtime ON users;
-
-DROP TABLE IF EXISTS users;
