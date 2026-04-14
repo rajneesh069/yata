@@ -3,8 +3,7 @@ import { TicketStatusEnum } from "./enums";
 
 export const TicketSchema = z.object({
   id: z.uuid(),
-  workspaceId: z.uuid(),
-  taskName: z.string().nonempty(),
+  taskId: z.uuid(),
   title: z.string().nonempty(),
   description: z.string().nullable(),
   raisedById: z.uuid(),
