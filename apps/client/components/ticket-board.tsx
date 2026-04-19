@@ -3,7 +3,7 @@ import { TicketCard } from "./ticket";
 
 export function TicketBoard({ data }: { data: Map<string, Ticket[]> }) {
   return (
-    <div className="grid md:grid-flow-col gap-x-4 overflow-x-auto md:auto-cols-[minmax(400px, 1fr)]">
+    <div className="grid md:grid-flow-col gap-x-4 overflow-x-auto md:auto-cols-max h-[90vh]">
       {Array.from(data).map(([taskName, tickets]) => (
         <div
           key={taskName}

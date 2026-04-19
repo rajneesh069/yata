@@ -1,3 +1,4 @@
+import { mockTasks } from "@/lib/mock/tasks";
 import { mockTickets } from "@/lib/mock/tickets";
 import { Ticket } from "@/types/ticket";
 
@@ -8,12 +9,13 @@ export async function getAllDataForAWorkspace(
   await new Promise((resolve) => setTimeout(resolve, 3_000));
   const result: Map<string, Ticket[]> = new Map<string, Ticket[]>();
 
-  for (const ticket of mockTickets) {
-    if (ticket.workspaceId !== workspaceId) continue;
-    if (!result.has(ticket.taskName)) {
-      result.set(ticket.taskName, []);
-    }
-    result.get(ticket.taskName)?.push(ticket);
+  for (const task of mockTasks) {
+    if (task.workspaceId !== workspaceId) continue;
+    result.set(
+      task.name,
+      mockTickets.filter((ticket) => ticket.taskId === task.id),
+    );
   }
+
   return result;
 }
