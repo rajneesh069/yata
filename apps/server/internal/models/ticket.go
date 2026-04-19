@@ -1,6 +1,10 @@
 package models
 
-import "time"
+import (
+	"time"
+
+	"github.com/google/uuid"
+)
 
 type TicketStatus string
 
@@ -16,12 +20,20 @@ const (
 )
 
 type Ticket struct {
-	ID          string       `json:"id" db:"id"`
+	ID          uuid.UUID    `json:"id" db:"id"`
 	Title       string       `json:"title" db:"title"`
-	Description *string      `json:"description" db:"description"`
-	RaisedByID  string       `json:"raisedById" db:"raised_by_id"` // FK to user.id
+	Description string       `json:"description" db:"description"`
+	TaskID      uuid.UUID    `json:"taskId" db:"task_id"`
+	RaisedBy    uuid.UUID    `json:"raisedBy" db:"raised_by"` // FK to user.id
 	Status      TicketStatus `json:"status" db:"status"`
-	Tags        []string     `json:"tags" db:"tags"`
 	CreatedAt   time.Time    `json:"createdAt" db:"created_at"`
 	UpdatedAt   time.Time    `json:"updatedAt" db:"updated_at"`
+}
+
+func (s TicketStatus) IsTicketStatusValid() bool {
+	switch s {
+	case StatusClosed, StatusInProgress, StatusInReview, StatusMergeApproved, StatusOpen, StatusReviewApproved, StatusReviewPending, StatusReviewRejected:
+		return true
+	}
+	return false
 }
